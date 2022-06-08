@@ -1,0 +1,72 @@
+{% extends 'main.html' %}
+
+{% block content %}
+{% load static %}
+<div class="row">
+    <div class="col-6">
+        {% if request.user.is_authenticated %}
+            <h1>Welcome, <b style="color: rgb(46, 158, 192);">{{request.user.username}}!</b></h1> 
+        {% else %}
+            <h1>No User Logon, Please Login</h1> 
+        {% endif %}
+    </div>
+</div>
+<br>
+
+<div class="row">
+    <div class="col-12">
+        <h1 style="text-align: center; color: rgb(46, 158, 192);"><u>{% if request.user.is_authenticated == False %}All {% endif %}BOOKS</u></h1>
+        <!--<hr style="color:rgb(46, 158, 192) ;">-->
+    </div>
+</div>
+<br>
+<br>
+
+<div class="table-responsive">
+
+    <table class='table table-striped table-hover' id="example" class="display" style="width:100%">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Publisher</th>
+                <th>Total Pages</th>
+                {% if request.user.is_authenticated %}
+                <th>Edit</th>
+                <th>Delete</th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in books %}
+            <tr>
+                <td>{{ item.title }}</td>
+                <td>{{ item.author }}</td>
+                <td>{{ item.publisher }}</td>
+                <td>{{ item.sum_pages }}</td>
+                {% if request.user.is_authenticated %}
+                <td><a href="{% url 'book-update' item.id %}"><img src="{% static 'images/icon/edit.svg' %}" alt=""></a></td>
+                <td><a href="{% url 'book-delete' item.id %}"><img src="{% static 'images/icon/x-circle.svg' %}" alt=""></a></td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Publisher</th>
+                <th>Total Pages</th>
+            </tr>
+        </tfoot>
+        {% if request.user.is_authenticated %}
+        <div>
+            <th><a href="{% url 'book-add' %}"><button style="background-color: rgb(46, 158, 192); color: white;">Add New Book</button></th></a>
+        </div>
+        {% endif %}
+    </table>
+
+
+</div>
+
+{% endblock content %}
